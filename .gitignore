@@ -1,0 +1,12 @@
+*/
+!modules/
+!config/
+package-lock.json
+passwords.json
+user.json
+user2.json
+config/userConfig.json
+*.xlsx
+*.txt
+*.zip
+*.pdf
