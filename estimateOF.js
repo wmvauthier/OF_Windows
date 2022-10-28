@@ -37,7 +37,7 @@ async function processLineByLine() {
     let alterShellPoints = pointsList.points[19].value;
     let createSQLPoints = pointsList.points[20].value;
     var createPythonPoints = pointsList.points[21].value;
-    var alterPythonPoints = pointsList.points[22].value;.
+    var alterPythonPoints = pointsList.points[22].value;
 
     let SISBBPoints = 0;
     let gitFiles = [];
