@@ -2,19 +2,19 @@ const user = require('../user.json');
 const pointsList = require('../modules/pointsList.json');
 const fileManager = require('../modules/fileManager.js');
 
-let tasks = user.tasks;
-let operations = user.operations;
-let repositories = user.repositories;
+var tasks = user.tasks;
+var operations = user.operations;
+var repositories = user.repositories;
 
-let ritoOptions1 = pointsList.points[11].options;
-let ritoOptions2 = pointsList.points[12].options;
-let ritoOptions3 = pointsList.points[13].options;
+var ritoOptions1 = pointsList.points[11].options;
+var ritoOptions2 = pointsList.points[12].options;
+var ritoOptions3 = pointsList.points[13].options;
 
-let operationOptions = pointsList.points[16].options;
-let repositoryOptions = pointsList.points[17].options;
-let ritosList = [ritoOptions1, ritoOptions2, ritoOptions3];
-let operationList = [operationOptions];
-let repositoryList = [repositoryOptions];
+var operationOptions = pointsList.points[16].options;
+var repositoryOptions = pointsList.points[17].options;
+var ritosList = [ritoOptions1, ritoOptions2, ritoOptions3];
+var operationList = [operationOptions];
+var repositoryList = [repositoryOptions];
 
 module.exports.checkValidLineFromCommit = (line) => {
 
@@ -64,25 +64,27 @@ module.exports.detectFilesCategory = (line, projectName, gitFiles, linesFromInpu
   createShell, createShellPoints, createShellQTD,
   alterShell, alterShellPoints, alterShellQTD,
   createSQL, createSQLPoints, createSQLQTD,
+  createPython, createPythonPoints, createPythonQTD,
+  alterPython, alterPythonPoints, alterPythonQTD,
   others, othersQTD
 ) => {
 
   linesFromInput.push(line);
 
-  let n = line.lastIndexOf("src");
-  let a = line.lastIndexOf("pom");
-  let b = line.lastIndexOf("values");
+  var n = line.lastIndexOf("src");
+  var a = line.lastIndexOf("pom");
+  var b = line.lastIndexOf("values");
 
   if (n > 0) { line = line.substring(0, n) + projectName + line.substring(n); }
   else if (a > 0) { line = line.substring(0, a) + projectName + line.substring(a); }
   else if (b > 0) { line = line.substring(0, b) + projectName + line.substring(b); }
 
-  let type = line.charAt(0);
+  var type = line.charAt(0);
 
   if ((line.lastIndexOf(".") > 0) || line.includes("Dockerfile") || line.includes("Jenkinsfile")) {
 
-    let arr = line.split(".");
-    let extension = arr[arr.length - 1];
+    var arr = line.split(".");
+    var extension = arr[arr.length - 1];
 
     if (type == "M" && (extension == "js" || extension == "ts")) {
       if (line.lastIndexOf('test') > 0 || line.lastIndexOf('Test') > 0) {
@@ -169,20 +171,28 @@ module.exports.detectFilesCategory = (line, projectName, gitFiles, linesFromInpu
         createXMLQTD++;
       }
 
-      // } else if (type == "A" && (extension == "sh")) {
-      //   createShell += `${line.substring(1)}#${hashCommit}\n`;
-      //   gitFiles.push(line + " (+" + createShellPoints + "pts)");
-      //   createShellQTD++;
-      // } else if (type == "M" && (extension == "sh")) {
-      //   alterShell += `${line.substring(1)}#${hashCommit}\n`;
-      //   gitFiles.push(line + " (+" + alterShellPoints + "pts)");
-      //   alterShellQTD++;
-      // } 
-
     } else if ((type == "M" || type == "A") && (extension == "sql")) {
       createSQL += `${line.substring(1)}#${hashCommit}\n`;
       gitFiles.push(line + " (+" + createSQLPoints + "pts)");
       createSQLQTD++;
+    } else if (type == "M" && (extension == "py")) {
+      if (line.lastIndexOf('test') > 0 || line.lastIndexOf('Test') > 0) {
+        createJavaTest += `${line.substring(1)}#${hashCommit}\n`;
+        createJavaTestQTD++;
+      } else {
+        alterPython += `${line.substring(1)}#${hashCommit}\n`;
+        gitFiles.push(line + " (+" + alterPythonPoints + "pts)");
+        alterPythonQTD++;
+      }
+    } else if (type == "A" && (extension == "py")) {
+      if (line.lastIndexOf('test') > 0 || line.lastIndexOf('Test') > 0) {
+        createJavaTest += `${line.substring(1)}#${hashCommit}\n`;
+        createJavaTestQTD++;
+      } else {
+        createPython += `${line.substring(1)}#${hashCommit}\n`;
+        gitFiles.push(line + " (+" + createPythonPoints + "pts)");
+        createPythonQTD++;
+      }
     } else {
       others += `${line}#${hashCommit}\n`;
       othersQTD++;
@@ -193,7 +203,7 @@ module.exports.detectFilesCategory = (line, projectName, gitFiles, linesFromInpu
     othersQTD++;
   }
 
-  let obj = {
+  var obj = {
     line: line,
     projectName: projectName,
     gitFiles: gitFiles,
@@ -244,6 +254,12 @@ module.exports.detectFilesCategory = (line, projectName, gitFiles, linesFromInpu
     createSQL: createSQL,
     createSQLPoints: createSQLPoints,
     createSQLQTD: createSQLQTD,
+    createPython: createPython,
+    createPythonPoints: createPythonPoints,
+    createPythonQTD: createPythonQTD,
+    alterPython: alterPython,
+    alterPythonPoints: alterPythonPoints,
+    alterPythonQTD: alterPythonQTD,
     others: others,
     othersQTD: othersQTD
   }
@@ -279,7 +295,7 @@ module.exports.addRitosPoints = (SISBBPoints, rowCounter, worksheet) => {
 
   }
 
-  let jsonReturn = {
+  var jsonReturn = {
     "SISBBPoints": SISBBPoints,
     "rowCounter": rowCounter,
     "worksheet": worksheet

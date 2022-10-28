@@ -5,8 +5,8 @@ async function processLineByLine() {
 
   if (checkPersonalFilesResult) {
 
-    //const updateGit = require('./config/updateGit.js');
-    //updateGit.updateGitRepository();
+    const updateGit = require('./config/updateGit.js');
+    updateGit.updateGitRepository();
 
     await checkPersonalFiles.checkBashFunctions();
     await checkPersonalFiles.checkNodeModules();
@@ -36,6 +36,8 @@ async function processLineByLine() {
     let createShellPoints = pointsList.points[18].value;
     let alterShellPoints = pointsList.points[19].value;
     let createSQLPoints = pointsList.points[20].value;
+    var createPythonPoints = pointsList.points[21].value;
+    var alterPythonPoints = pointsList.points[22].value;.
 
     let SISBBPoints = 0;
     let gitFiles = [];
@@ -53,7 +55,7 @@ async function processLineByLine() {
 
       if (projectName != null && projectName != "") {
 
-        projectName = projectName.replace("\r","");
+        projectName = projectName.replace("\r", "");
 
         let commits = await system.execShellCommandCheckFolders(shellCommands.generateGitCommits(projectName));
         commits = commits.split("\n");
@@ -76,6 +78,8 @@ async function processLineByLine() {
         let createShell = "";
         let alterShell = "";
         let createSQL = "";
+        var createPython = "";
+        var alterPython = "";
         let others = "";
 
         let createJavaQTD = 0;
@@ -93,6 +97,8 @@ async function processLineByLine() {
         let createShellQTD = 0;
         let alterShellQTD = 0;
         let createSQLQTD = 0;
+        var createPythonQTD = 0;
+        var alterPythonQTD = 0;
         let othersQTD = 0;
 
         let hashCommit = "###########";
@@ -129,6 +135,8 @@ async function processLineByLine() {
                 createShell, createShellPoints, createShellQTD,
                 alterShell, alterShellPoints, alterShellQTD,
                 createSQL, createSQLPoints, createSQLQTD,
+                createPython, createPythonPoints, createPythonQTD,
+                alterPython, alterPythonPoints, alterPythonQTD,
                 others, othersQTD
               );
 
@@ -167,6 +175,8 @@ async function processLineByLine() {
               createShellQTD = obj.createShellQTD;
               createSQL = obj.createSQL;
               createSQLQTD = obj.createSQLQTD;
+              createPythonQTD = obj.createPythonQTD;
+              alterPythonQTD = obj.alterPythonQTD;
               others = obj.others;
               othersQTD = obj.othersQTD;
 
@@ -178,7 +188,8 @@ async function processLineByLine() {
 
         let totalQtd = createJavaQTD + alterJavaQTD + alterJavaCompQTD + createJavaTestQTD
           + createHTMLQTD + alterHTMLQTD + createJSQTD + alterJSQTD + createXMLQTD
-          + createCSSQTD + alterCSSQTD + alterXMLQTD + createShellQTD + alterShellQTD + createSQLQTD;
+          + createCSSQTD + alterCSSQTD + alterXMLQTD + createShellQTD + alterShellQTD + createSQLQTD
+          + createPythonQTD + alterPythonQTD;
 
         let totalSISBB = (createJavaQTD * createJavaPoints)
           + (alterJavaQTD * alterJavaPoints)
@@ -193,8 +204,10 @@ async function processLineByLine() {
           + (alterXMLQTD * alterXMLPoints)
           + (createShellQTD * createShellPoints)
           + (alterShellQTD * alterShellPoints)
-          + (createSQLQTD * createSQLPoints);
-
+          + (createSQLQTD * createSQLPoints)
+          + (createPythonQTD * createPythonPoints)
+          + (alterPythonQTD * alterPythonPoints);
+          
         othersFinalQTD += othersQTD;
         totalQtdBkp += totalQtd;
         SISBBPoints += totalSISBB;

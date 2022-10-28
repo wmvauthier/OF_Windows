@@ -16,3 +16,7 @@
 
 //Pra configurações de VDI tem que usar o 5.23.1
 //Pra passagem de conhecimento tem que usar o impl-software para integração - passagem
+
+// Pra instalar o puppeteer
+// cd ./node_modules/puppeteer
+// npm run install
