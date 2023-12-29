@@ -57,6 +57,8 @@ async function processLineByLine() {
 
         projectName = projectName.replace("\r", "");
 
+        console.log(projectName);
+        
         let commits = await system.execShellCommandCheckFolders(shellCommands.generateGitCommits(projectName));
         commits = commits.split("\n");
         projectName += "/";
