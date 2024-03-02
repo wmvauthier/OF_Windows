@@ -3,12 +3,15 @@ const userConfig = require('../config/userConfig.json');
 const system = require('./system.js');
 const fs = require('fs');
 
-let directoryOF = userConfig.directoryOF;
-let choosenDate = user.choosenDate;
-let otherDate = user.otherDate;
-let tasks = user.tasks;
-let operations = user.operations;
-let repositories = user.repositories;
+var directoryOF = userConfig.directoryOF;
+var chave = user.chave;
+var numeroOF = user.numeroOF;
+var numeroOrdemContratacao = user.numeroOrdemContratacao;
+var choosenDate = user.choosenDate;
+var otherDate = user.otherDate;
+var tasks = user.tasks;
+var operations = user.operations;
+var repositories = user.repositories;
 let baseXLS = userConfig.baseXLS;
 let baseSheet = userConfig.baseSheet;
 let hermesXLS = userConfig.hermesXLS;
@@ -30,7 +33,7 @@ module.exports.writeToFiles = (QTD, points, options, tmpFile, files, filesTXT, w
 
 module.exports.addHistoryRito = (tasks, ritosList, worksheet, rowCounter) => {
 
-    let tasksStr = "";
+    var tasksStr = "";
 
     tasks.forEach(history => {
         tasksStr += history;
@@ -57,10 +60,10 @@ module.exports.addHistoryRito = (tasks, ritosList, worksheet, rowCounter) => {
 
 module.exports.updateUserJsonFile = async (points, files) => {
 
-    let opStr = "";
+    var opStr = "";
 
     if (operations) {
-        let opArray = operations.toString().split(",");
+        var opArray = operations.toString().split(",");
 
         opStr += "[";
         opArray.forEach(operation => {
@@ -71,10 +74,10 @@ module.exports.updateUserJsonFile = async (points, files) => {
         opStr += "]";
     } else { opStr = "[]" }
 
-    let repoStr = "";
+    var repoStr = "";
 
     if (repositories) {
-        let repoArray = repositories.toString().split(",");
+        var repoArray = repositories.toString().split(",");
 
         repoStr += "[";
         repoArray.forEach(repository => {
@@ -85,10 +88,10 @@ module.exports.updateUserJsonFile = async (points, files) => {
         repoStr += "]";
     } else { repoStr = "[]" }
 
-    let histStr = "";
+    var histStr = "";
 
     if (tasks) {
-        let histArray = tasks.toString().split(",");
+        var histArray = tasks.toString().split(",");
 
         histStr += "[";
         histArray.forEach(history => {
@@ -99,10 +102,10 @@ module.exports.updateUserJsonFile = async (points, files) => {
         histStr += "]";
     } else { histStr = "[]" }
 
-    let filesStr = "";
+    var filesStr = "";
 
     if (files) {
-        let filesArray = files.toString().split(",");
+        var filesArray = files.toString().split(",");
 
         filesStr += `[`;
         filesArray.forEach(file => {
@@ -126,7 +129,10 @@ module.exports.updateUserJsonFile = async (points, files) => {
     if (!baseSheet)
         baseSheet = "Orçamento";
 
-    let userJsonFile = `{
+    var userJsonFile = `{
+      "chave": "${chave}",
+      "numeroOF": "${numeroOF}",
+      "numeroOrdemContratacao": ${numeroOrdemContratacao},
       "choosenDate": "${choosenDate}",
       "otherDate": "${otherDate}",
       "operations": ${opStr},
@@ -136,9 +142,9 @@ module.exports.updateUserJsonFile = async (points, files) => {
       "files": ${filesStr}
   }`;
 
-    let filePath = `${directoryOF}/user.json`;
+    var filePath = `${directoryOF}/user.json`;
 
-    await system.execShellCommand('del /F /Q user.json');
+    await system.execShellCommand('find . -name "user.json" -type f -delete');
 
     this.writeFile(filePath, userJsonFile);
 
