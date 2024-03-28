@@ -1,179 +1,129 @@
-const user = require("./user.json");
-const userConfig = require("./config/userConfig.json");
-const negotials = require("./modules/negotials.js");
-const pointsList = require("./modules/pointsList.json");
-const fileManager = require("./modules/fileManager.js");
-const xlsManager = require("./modules/xlsManager.js");
-const termgraph = require("./modules/termgraph.js");
-const system = require("./modules/system.js");
-const utils = require("./modules/utils.js");
-const shellComands = require("./modules/shellCommands.js");
-const readline = require("readline");
-var Excel = require("exceljs");
+const user = require('./user.json');
+const userConfig = require('./config/userConfig.json');
+const negotials = require('./modules/negotials.js');
+const pointsList = require('./modules/pointsList.json');
+const fileManager = require('./modules/fileManager.js');
+const xlsManager = require('./modules/xlsManager.js');
+const termgraph = require('./modules/termgraph.js');
+const system = require('./modules/system.js');
+const utils = require('./modules/utils.js');
+const shellComands = require('./modules/shellCommands.js');
+const readline = require('readline');
+let Excel = require('exceljs');
 
 // VERIFICAR VARIÁVEIS GLOBAIS
-var directoryOF = userConfig.directoryOF;
-var yourName = userConfig.yourName;
+let directoryOF = userConfig.directoryOF;
+let yourName = userConfig.yourName;
 let baseXLS = userConfig.baseXLS;
 let baseSheet = userConfig.baseSheet;
 let hermesXLS = userConfig.hermesXLS;
 let repeatFiles = userConfig.repeatFiles;
 
-var createJavaPoints = pointsList.points[0].value;
-var alterJavaPoints = pointsList.points[1].value;
-var alterJavaCompPoints = pointsList.points[2].value;
-var createJavaTestPoints = pointsList.points[3].value;
-var createHTMLPoints = pointsList.points[4].value;
-var alterHTMLPoints = pointsList.points[5].value;
-var createJSPoints = pointsList.points[6].value;
-var alterJSPoints = pointsList.points[7].value;
-var createXMLPoints = pointsList.points[8].value;
-var alterXMLPoints = pointsList.points[9].value;
-var createCSSPoints = pointsList.points[14].value;
-var alterCSSPoints = pointsList.points[15].value;
-var createShellPoints = pointsList.points[18].value;
-var alterShellPoints = pointsList.points[19].value;
-var createSQLPoints = pointsList.points[20].value;
+let createJavaPoints = pointsList.points[0].value;
+let alterJavaPoints = pointsList.points[1].value;
+let alterJavaCompPoints = pointsList.points[2].value;
+let createJavaTestPoints = pointsList.points[3].value;
+let createHTMLPoints = pointsList.points[4].value;
+let alterHTMLPoints = pointsList.points[5].value;
+let createJSPoints = pointsList.points[6].value;
+let alterJSPoints = pointsList.points[7].value;
+let createXMLPoints = pointsList.points[8].value;
+let alterXMLPoints = pointsList.points[9].value;
+let createCSSPoints = pointsList.points[14].value;
+let alterCSSPoints = pointsList.points[15].value;
+let createShellPoints = pointsList.points[18].value;
+let alterShellPoints = pointsList.points[19].value;
+let createSQLPoints = pointsList.points[20].value;
 var createPythonPoints = pointsList.points[21].value;
 var alterPythonPoints = pointsList.points[22].value;
 
-var createJavaOptions = pointsList.points[0].options;
-var alterJavaOptions = pointsList.points[1].options;
-var alterJavaCompOptions = pointsList.points[2].options;
-var createJavaTestOptions = pointsList.points[3].options;
-var createHTMLOptions = pointsList.points[4].options;
-var alterHTMLOptions = pointsList.points[5].options;
-var createJSOptions = pointsList.points[6].options;
-var alterJSOptions = pointsList.points[7].options;
-var createXMLOptions = pointsList.points[8].options;
-var alterXMLOptions = pointsList.points[9].options;
-var createCSSOptions = pointsList.points[14].options;
-var alterCSSOptions = pointsList.points[15].options;
-var createShellOptions = pointsList.points[18].options;
-var alterShellOptions = pointsList.points[19].options;
-var createSQLOptions = pointsList.points[20].options;
+let createJavaOptions = pointsList.points[0].options;
+let alterJavaOptions = pointsList.points[1].options;
+let alterJavaCompOptions = pointsList.points[2].options;
+let createJavaTestOptions = pointsList.points[3].options;
+let createHTMLOptions = pointsList.points[4].options;
+let alterHTMLOptions = pointsList.points[5].options;
+let createJSOptions = pointsList.points[6].options;
+let alterJSOptions = pointsList.points[7].options;
+let createXMLOptions = pointsList.points[8].options;
+let alterXMLOptions = pointsList.points[9].options;
+let createCSSOptions = pointsList.points[14].options;
+let alterCSSOptions = pointsList.points[15].options;
+let createShellOptions = pointsList.points[18].options;
+let alterShellOptions = pointsList.points[19].options;
+let createSQLOptions = pointsList.points[20].options;
 var createPythonOptions = pointsList.points[21].options;
 var alterPythonOptions = pointsList.points[22].options;
 
-var createJavaTXT = pointsList.points[0].name;
-var alterJavaTXT = pointsList.points[1].name;
-var alterJavaCompTXT = pointsList.points[2].name;
-var createJavaTestTXT = pointsList.points[3].name;
-var createHTMLTXT = pointsList.points[4].name;
-var alterHTMLTXT = pointsList.points[5].name;
-var createJSTXT = pointsList.points[6].name;
-var alterJSTXT = pointsList.points[7].name;
-var createXMLTXT = pointsList.points[8].name;
-var alterXMLTXT = pointsList.points[9].name;
-var othersTXT = pointsList.points[10].name;
-var createCSSTXT = pointsList.points[14].name;
-var alterCSSTXT = pointsList.points[15].name;
-var createShellTXT = pointsList.points[18].name;
-var alterShellTXT = pointsList.points[19].name;
-var createSQLTXT = pointsList.points[20].name;
+let createJavaTXT = pointsList.points[0].name;
+let alterJavaTXT = pointsList.points[1].name;
+let alterJavaCompTXT = pointsList.points[2].name;
+let createJavaTestTXT = pointsList.points[3].name;
+let createHTMLTXT = pointsList.points[4].name;
+let alterHTMLTXT = pointsList.points[5].name;
+let createJSTXT = pointsList.points[6].name;
+let alterJSTXT = pointsList.points[7].name;
+let createXMLTXT = pointsList.points[8].name;
+let alterXMLTXT = pointsList.points[9].name;
+let othersTXT = pointsList.points[10].name;
+let createCSSTXT = pointsList.points[14].name;
+let alterCSSTXT = pointsList.points[15].name;
+let createShellTXT = pointsList.points[18].name;
+let alterShellTXT = pointsList.points[19].name;
+let createSQLTXT = pointsList.points[20].name;
 var createPythonTXT = pointsList.points[21].name;
 var alterPythonTXT = pointsList.points[22].name;
 
-var createJavaCode = pointsList.points[0].code;
-var alterJavaCode = pointsList.points[1].code;
-var alterJavaCompCode = pointsList.points[2].code;
-var createJavaTestCode = pointsList.points[3].code;
-var createHTMLCode = pointsList.points[4].code;
-var alterHTMLCode = pointsList.points[5].code;
-var createJSCode = pointsList.points[6].code;
-var alterJSCode = pointsList.points[7].code;
-var createXMLCode = pointsList.points[8].code;
-var alterXMLCode = pointsList.points[9].code;
-var othersCode = pointsList.points[10].code;
-var createCSSCode = pointsList.points[14].code;
-var alterCSSCode = pointsList.points[15].code;
-var createShellCode = pointsList.points[18].code;
-var alterShellCode = pointsList.points[19].code;
-var createSQLCode = pointsList.points[20].code;
-var createPythonCode = pointsList.points[21].code;
-var alterPythonCode = pointsList.points[22].code;
-
-var createJavaComplexity = pointsList.points[0].complexity;
-var alterJavaComplexity = pointsList.points[1].complexity;
-var alterJavaCompComplexity = pointsList.points[2].complexity;
-var createJavaTestComplexity = pointsList.points[3].complexity;
-var createHTMLComplexity = pointsList.points[4].complexity;
-var alterHTMLComplexity = pointsList.points[5].complexity;
-var createJSComplexity = pointsList.points[6].complexity;
-var alterJSComplexity = pointsList.points[7].complexity;
-var createXMLComplexity = pointsList.points[8].complexity;
-var alterXMLComplexity = pointsList.points[9].complexity;
-var othersComplexity = pointsList.points[10].complexity;
-var createCSSComplexity = pointsList.points[14].complexity;
-var alterCSSComplexity = pointsList.points[15].complexity;
-var createShellComplexity = pointsList.points[18].complexity;
-var alterShellComplexity = pointsList.points[19].complexity;
-var createSQLComplexity = pointsList.points[20].complexity;
-var createPythonComplexity = pointsList.points[21].complexity;
-var alterPythonComplexity = pointsList.points[22].complexity;
-
-var createJavaFinal = "";
-var alterJavaFinal = "";
-var alterJavaCompFinal = "";
-var createJavaTestFinal = "";
-var createHTMLFinal = "";
-var alterHTMLFinal = "";
-var createJSFinal = "";
-var alterJSFinal = "";
-var createXMLFinal = "";
-var alterXMLFinal = "";
-var createCSSFinal = "";
-var alterCSSFinal = "";
-var createShellFinal = "";
-var alterShellFinal = "";
-var createSQLFinal = "";
+let createJavaFinal = "";
+let alterJavaFinal = "";
+let alterJavaCompFinal = "";
+let createJavaTestFinal = "";
+let createHTMLFinal = "";
+let alterHTMLFinal = "";
+let createJSFinal = "";
+let alterJSFinal = "";
+let createXMLFinal = "";
+let alterXMLFinal = "";
+let createCSSFinal = "";
+let alterCSSFinal = "";
+let createShellFinal = "";
+let alterShellFinal = "";
+let createSQLFinal = "";
 var createPythonFinal = "";
 var alterPythonFinal = "";
-var othersFinal = "";
+let othersFinal = "";
 
-var createJavaFinalQTD = 0;
-var alterJavaFinalQTD = 0;
-var alterJavaCompFinalQTD = 0;
-var createJavaTestFinalQTD = 0;
-var createHTMLFinalQTD = 0;
-var alterHTMLFinalQTD = 0;
-var createJSFinalQTD = 0;
-var alterJSFinalQTD = 0;
-var createXMLFinalQTD = 0;
-var alterXMLFinalQTD = 0;
-var createCSSFinalQTD = 0;
-var alterCSSFinalQTD = 0;
-var createShellFinalQTD = 0;
-var alterShellFinalQTD = 0;
-var createSQLFinalQTD = 0;
+let createJavaFinalQTD = 0;
+let alterJavaFinalQTD = 0;
+let alterJavaCompFinalQTD = 0;
+let createJavaTestFinalQTD = 0;
+let createHTMLFinalQTD = 0;
+let alterHTMLFinalQTD = 0;
+let createJSFinalQTD = 0;
+let alterJSFinalQTD = 0;
+let createXMLFinalQTD = 0;
+let alterXMLFinalQTD = 0;
+let createCSSFinalQTD = 0;
+let alterCSSFinalQTD = 0;
+let createShellFinalQTD = 0;
+let alterShellFinalQTD = 0;
+let createSQLFinalQTD = 0;
 var createPythonFinalQTD = 0;
 var alterPythonFinalQTD = 0;
-var othersFinalQTD = 0;
+let othersFinalQTD = 0;
 
-var totalQtdBkp = 0;
-var totalSISBBBkp = 0;
-var gitFiles = [];
+let totalQtdBkp = 0;
+let totalSISBBBkp = 0;
+let gitFiles = [];
 
-var data = new Date();
-var month = [
-  "Janeiro",
-  "Fevereiro",
-  "Março",
-  "Abril",
-  "Maio",
-  "Junho",
-  "Julho",
-  "Agosto",
-  "Setembro",
-  "Outubro",
-  "Novembro",
-  "Dezembro",
-][data.getMonth()].toUpperCase();
-var year = data.getFullYear();
+let data = new Date();
+let month = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][data.getMonth()].toUpperCase();
+let year = data.getFullYear();
 
-var fullReportFile = "";
+let fullReportFile = "";
 
 async function processLineByLine() {
+
   let workbook = new Excel.Workbook();
   await workbook.xlsx.readFile(baseXLS);
   let worksheet = workbook.getWorksheet(baseSheet);
@@ -182,156 +132,112 @@ async function processLineByLine() {
 
   let rowCounter = 4;
 
-  var allProjects = await system.execShellCommand(shellComands.cdAndLs);
+  let allProjects = await system.execShellCommand(shellComands.cdAndLs);
   allProjects = allProjects.split("\n");
 
-  await system.execShellCommand(`mkdir -p ${month}-${year}`);
+  await system.execShellCommand(`if not exist ${month}-${year} mkdir ${month}-${year}`);
   directoryOF = `${directoryOF}/${month}-${year}`;
 
-  for (var i = 0; i < allProjects.length; i++) {
-    var projectName = allProjects[i];
+  for (let i = 0; i < allProjects.length; i++) {
+
+    let projectName = allProjects[i];
+
+    projectName = projectName.replace("\r","");
 
     if (projectName != null && projectName != "") {
-      await system.execShellCommandCheckFolders(
-        shellComands.generateGitCommitsOutput(projectName)
-      );
 
-      var fullReportProject = await system.execShellCommandCheckFolders(
-        shellComands.getFullReportGit(projectName)
-      );
+      await system.execShellCommandCheckFolders(shellComands.generateGitCommitsOutput(projectName));
 
-      const fileStream = fileManager.createReadStream("input.txt");
+      let fullReportProject = await system.execShellCommandCheckFolders(shellComands.getFullReportGit(projectName));
 
-      var output = `${projectName}-${month}-${data.getFullYear()}`;
+      const fileStream = fileManager.createReadStream('input.txt');
+
+      let output = `${projectName}-${month}-${data.getFullYear()}`;
       projectName += "/";
 
-      var filePath = `${directoryOF}/${output}.txt`;
+      let filePath = `${directoryOF}/${output}.txt`;
 
-      var linesFromInput = [];
-      var tmpFile = "";
+      let linesFromInput = [];
+      let tmpFile = "";
 
-      var createJava = "";
-      var alterJava = "";
-      var alterJavaComp = "";
-      var createJavaTest = "";
-      var createHTML = "";
-      var alterHTML = "";
-      var createJS = "";
-      var alterJS = "";
-      var createCSS = "";
-      var alterCSS = "";
-      var createXML = "";
-      var alterXML = "";
-      var createShell = "";
-      var alterShell = "";
-      var createSQL = "";
+      let createJava = "";
+      let alterJava = "";
+      let alterJavaComp = "";
+      let createJavaTest = "";
+      let createHTML = "";
+      let alterHTML = "";
+      let createJS = "";
+      let alterJS = "";
+      let createCSS = "";
+      let alterCSS = "";
+      let createXML = "";
+      let alterXML = "";
+      let createShell = "";
+      let alterShell = "";
+      let createSQL = "";
       var createPython = "";
       var alterPython = "";
-      var others = "";
+      let others = "";
 
-      var createJavaQTD = 0;
-      var alterJavaQTD = 0;
-      var alterJavaCompQTD = 0;
-      var createJavaTestQTD = 0;
-      var createHTMLQTD = 0;
-      var alterHTMLQTD = 0;
-      var createJSQTD = 0;
-      var alterJSQTD = 0;
-      var createCSSQTD = 0;
-      var alterCSSQTD = 0;
-      var createXMLQTD = 0;
-      var alterXMLQTD = 0;
-      var createShellQTD = 0;
-      var alterShellQTD = 0;
-      var createSQLQTD = 0;
+      let createJavaQTD = 0;
+      let alterJavaQTD = 0;
+      let alterJavaCompQTD = 0;
+      let createJavaTestQTD = 0;
+      let createHTMLQTD = 0;
+      let alterHTMLQTD = 0;
+      let createJSQTD = 0;
+      let alterJSQTD = 0;
+      let createCSSQTD = 0;
+      let alterCSSQTD = 0;
+      let createXMLQTD = 0;
+      let alterXMLQTD = 0;
+      let createShellQTD = 0;
+      let alterShellQTD = 0;
+      let createSQLQTD = 0;
       var createPythonQTD = 0;
       var alterPythonQTD = 0;
-      var othersQTD = 0;
+      let othersQTD = 0;
 
       const rl = readline.createInterface({
         input: fileStream,
-        crlfDelay: Infinity,
+        crlfDelay: Infinity
       });
 
-      var hashCommit = "###########";
+      let hashCommit = "###########";
 
-      for await (var line of rl) {
-        if (
-          line.includes("commit:") &&
-          negotials.checkValidLineFromCommit(line)
-        )
+      for await (let line of rl) {
+
+        if (line.includes("commit:") && negotials.checkValidLineFromCommit(line))
           hashCommit = line.split("#")[1];
 
-        var condition = true;
+        let condition = true;
 
         if (repeatFiles == false || repeatFiles == "false")
-          condition = !linesFromInput.includes(line);
+          condition = !linesFromInput.includes(line)
 
         if (condition) {
-          if (
-            !line.includes("commit:") &&
-            line != "" &&
-            negotials.checkValidLineFromCommit(line)
-          ) {
-            var obj = negotials.detectFilesCategory(
-              line,
-              projectName,
-              gitFiles,
-              linesFromInput,
-              hashCommit,
-              alterJS,
-              alterJSPoints,
-              alterJSQTD,
-              createJS,
-              createJSPoints,
-              createJSQTD,
-              alterCSS,
-              alterCSSPoints,
-              alterCSSQTD,
-              createCSS,
-              createCSSPoints,
-              createCSSQTD,
-              createJavaTest,
-              createJavaTestPoints,
-              createJavaTestQTD,
-              createJava,
-              createJavaPoints,
-              createJavaQTD,
-              alterJava,
-              alterJavaPoints,
-              alterJavaQTD,
-              alterJavaComp,
-              alterJavaCompPoints,
-              alterJavaCompQTD,
-              alterHTML,
-              alterHTMLPoints,
-              alterHTMLQTD,
-              createHTML,
-              createHTMLPoints,
-              createHTMLQTD,
-              alterXML,
-              alterXMLPoints,
-              alterXMLQTD,
-              createXML,
-              createXMLPoints,
-              createXMLQTD,
-              createShell,
-              createShellPoints,
-              createShellQTD,
-              alterShell,
-              alterShellPoints,
-              alterShellQTD,
-              createSQL,
-              createSQLPoints,
-              createSQLQTD,
-              createPython,
-              createPythonPoints,
-              createPythonQTD,
-              alterPython,
-              alterPythonPoints,
-              alterPythonQTD,
-              others,
-              othersQTD
+
+          if (!line.includes("commit:") && line != "" && negotials.checkValidLineFromCommit(line)) {
+
+            let obj = negotials.detectFilesCategory(line, projectName, gitFiles, linesFromInput, hashCommit,
+              alterJS, alterJSPoints, alterJSQTD,
+              createJS, createJSPoints, createJSQTD,
+              alterCSS, alterCSSPoints, alterCSSQTD,
+              createCSS, createCSSPoints, createCSSQTD,
+              createJavaTest, createJavaTestPoints, createJavaTestQTD,
+              createJava, createJavaPoints, createJavaQTD,
+              alterJava, alterJavaPoints, alterJavaQTD,
+              alterJavaComp, alterJavaCompPoints, alterJavaCompQTD,
+              alterHTML, alterHTMLPoints, alterHTMLQTD,
+              createHTML, createHTMLPoints, createHTMLQTD,
+              alterXML, alterXMLPoints, alterXMLQTD,
+              createXML, createXMLPoints, createXMLQTD,
+              createShell, createShellPoints, createShellQTD,
+              alterShell, alterShellPoints, alterShellQTD,
+              createSQL, createSQLPoints, createSQLQTD,
+              createPython, createPythonPoints, createPythonQTD,
+              alterPython, alterPythonPoints, alterPythonQTD,
+              others, othersQTD
             );
 
             line = obj.line;
@@ -374,265 +280,74 @@ async function processLineByLine() {
             alterPythonQTD = obj.alterPythonQTD;
             others = obj.others;
             othersQTD = obj.othersQTD;
+
           }
+
         }
+
       }
 
-      tmpFile =
-        projectName +
-        " - " +
-        user.yourName +
-        " - " +
-        user.yourKey +
-        " - " +
-        user.choosenDate +
-        " - " +
-        user.otherDate +
-        "\n\n";
+      tmpFile = projectName + " - " + user.yourName + " - " + user.yourKey + " - " + user.choosenDate + " - " + user.otherDate + "\n\n";
 
-      var tmpResult = fileManager.writeToFiles(
-        createJavaQTD,
-        createJavaPoints,
-        createJavaOptions,
-        tmpFile,
-        createJava,
-        createJavaTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        alterJavaQTD,
-        alterJavaPoints,
-        alterJavaOptions,
-        tmpFile,
-        alterJava,
-        alterJavaTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        alterJavaCompQTD,
-        alterJavaCompPoints,
-        alterJavaCompOptions,
-        tmpFile,
-        alterJavaComp,
-        alterJavaCompTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        createJavaTestQTD,
-        createJavaTestPoints,
-        createJavaTestOptions,
-        tmpFile,
-        createJavaTest,
-        createJavaTestTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        createHTMLQTD,
-        createHTMLPoints,
-        createHTMLOptions,
-        tmpFile,
-        createHTML,
-        createHTMLTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        alterHTMLQTD,
-        alterHTMLPoints,
-        alterHTMLOptions,
-        tmpFile,
-        alterHTML,
-        alterHTMLTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        createJSQTD,
-        createJSPoints,
-        createJSOptions,
-        tmpFile,
-        createJS,
-        createJSTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        alterJSQTD,
-        alterJSPoints,
-        alterJSOptions,
-        tmpFile,
-        alterJS,
-        alterJSTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        createXMLQTD,
-        createXMLPoints,
-        createXMLOptions,
-        tmpFile,
-        createXML,
-        createXMLTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        alterXMLQTD,
-        alterXMLPoints,
-        alterXMLOptions,
-        tmpFile,
-        alterXML,
-        alterXMLTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        createCSSQTD,
-        createCSSPoints,
-        createCSSOptions,
-        tmpFile,
-        createCSS,
-        createCSSTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        alterCSSQTD,
-        alterCSSPoints,
-        alterCSSOptions,
-        tmpFile,
-        alterCSS,
-        alterCSSTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        createShellQTD,
-        createShellPoints,
-        createShellOptions,
-        tmpFile,
-        createShell,
-        createShellTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        alterShellQTD,
-        alterShellPoints,
-        alterShellOptions,
-        tmpFile,
-        alterShell,
-        alterShellTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        createSQLQTD,
-        createSQLPoints,
-        createShellOptions,
-        tmpFile,
-        createSQL,
-        createSQLTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        createPythonQTD,
-        createPythonPoints,
-        createPythonOptions,
-        tmpFile,
-        createPython,
-        createPythonTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
-      tmpResult = fileManager.writeToFiles(
-        alterPythonQTD,
-        alterPythonPoints,
-        alterPythonOptions,
-        tmpFile,
-        alterPython,
-        alterPythonTXT,
-        worksheet,
-        rowCounter
-      );
-      tmpFile = tmpResult.tmpFile;
-      rowCounter = tmpResult.rowCounter;
+      let tmpResult = fileManager.writeToFiles(createJavaQTD, createJavaPoints, createJavaOptions, tmpFile, createJava, createJavaTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(alterJavaQTD, alterJavaPoints, alterJavaOptions, tmpFile, alterJava, alterJavaTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(alterJavaCompQTD, alterJavaCompPoints, alterJavaCompOptions, tmpFile, alterJavaComp, alterJavaCompTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(createJavaTestQTD, createJavaTestPoints, createJavaTestOptions, tmpFile, createJavaTest, createJavaTestTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(createHTMLQTD, createHTMLPoints, createHTMLOptions, tmpFile, createHTML, createHTMLTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(alterHTMLQTD, alterHTMLPoints, alterHTMLOptions, tmpFile, alterHTML, alterHTMLTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(createJSQTD, createJSPoints, createJSOptions, tmpFile, createJS, createJSTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(alterJSQTD, alterJSPoints, alterJSOptions, tmpFile, alterJS, alterJSTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(createXMLQTD, createXMLPoints, createXMLOptions, tmpFile, createXML, createXMLTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(alterXMLQTD, alterXMLPoints, alterXMLOptions, tmpFile, alterXML, alterXMLTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(createCSSQTD, createCSSPoints, createCSSOptions, tmpFile, createCSS, createCSSTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(alterCSSQTD, alterCSSPoints, alterCSSOptions, tmpFile, alterCSS, alterCSSTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(createShellQTD, createShellPoints, createShellOptions, tmpFile, createShell, createShellTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(alterShellQTD, alterShellPoints, alterShellOptions, tmpFile, alterShell, alterShellTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(createSQLQTD, createSQLPoints, createShellOptions, tmpFile, createSQL, createSQLTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(createPythonQTD, createPythonPoints, createPythonOptions, tmpFile, createPython, createPythonTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
+      tmpResult = fileManager.writeToFiles(alterPythonQTD, alterPythonPoints, alterPythonOptions, tmpFile, alterPython, alterPythonTXT, worksheet, rowCounter);
+      tmpFile = tmpResult.tmpFile; rowCounter = tmpResult.rowCounter;
 
-      if (othersQTD > 0) tmpFile += `${othersTXT}\n ${others}\n`;
+      if (othersQTD > 0)
+        tmpFile += `${othersTXT}\n ${others}\n`;
 
-      var totalQtd =
-        createJavaQTD +
-        alterJavaQTD +
-        alterJavaCompQTD +
-        createJavaTestQTD +
-        createHTMLQTD +
-        alterHTMLQTD +
-        createJSQTD +
-        alterJSQTD +
-        createXMLQTD +
-        createCSSQTD +
-        alterCSSQTD +
-        alterXMLQTD +
-        createShellQTD +
-        alterShellQTD +
-        createSQLQTD +
-        createPythonQTD +
-        alterPythonQTD;
+      let totalQtd = createJavaQTD + alterJavaQTD + alterJavaCompQTD + createJavaTestQTD
+        + createHTMLQTD + alterHTMLQTD + createJSQTD + alterJSQTD + createXMLQTD
+        + createCSSQTD + alterCSSQTD + alterXMLQTD + createShellQTD + alterShellQTD + createSQLQTD
+        + createPythonQTD + alterPythonQTD;
 
-      var totalSISBB =
-        createJavaQTD * createJavaPoints +
-        alterJavaQTD * alterJavaPoints +
-        alterJavaCompQTD * alterJavaCompPoints +
-        createJavaTestQTD * createJavaTestPoints +
-        createHTMLQTD * createHTMLPoints +
-        alterHTMLQTD * alterHTMLPoints +
-        createJSQTD * createJSPoints +
-        alterJSQTD * alterJSPoints +
-        createCSSQTD * createCSSPoints +
-        alterCSSQTD * alterCSSPoints +
-        alterXMLQTD * alterXMLPoints +
-        createShellQTD * createShellPoints +
-        alterShellQTD * alterShellPoints +
-        createSQLQTD * createSQLPoints +
-        createPythonQTD * createPythonPoints +
-        alterPythonQTD * alterPythonPoints;
+      let totalSISBB = (createJavaQTD * createJavaPoints)
+        + (alterJavaQTD * alterJavaPoints)
+        + (alterJavaCompQTD * alterJavaCompPoints)
+        + (createJavaTestQTD * createJavaTestPoints)
+        + (createHTMLQTD * createHTMLPoints)
+        + (alterHTMLQTD * alterHTMLPoints)
+        + (createJSQTD * createJSPoints)
+        + (alterJSQTD * alterJSPoints)
+        + (createCSSQTD * createCSSPoints)
+        + (alterCSSQTD * alterCSSPoints)
+        + (alterXMLQTD * alterXMLPoints)
+        + (createShellQTD * createShellPoints)
+        + (alterShellQTD * alterShellPoints)
+        + (createSQLQTD * createSQLPoints)
+        + (createPythonQTD * createPythonPoints)
+        + (alterPythonQTD * alterPythonPoints);
 
       totalQtdBkp += totalQtd;
       totalSISBBBkp += totalSISBB;
@@ -641,9 +356,10 @@ async function processLineByLine() {
       tmpFile += `Pontuação Geral: ${totalSISBB} SISBB\n\n`;
 
       if (totalQtd > 0) {
+
         fileManager.writeFile(filePath, tmpFile);
 
-        var projectTitle = `${projectName} `;
+        let projectTitle = `${projectName} `;
 
         while (projectTitle.length < 110) {
           projectTitle += "*";
@@ -651,6 +367,7 @@ async function processLineByLine() {
 
         fullReportFile += `${projectTitle} \n`;
         fullReportFile += `\n${fullReportProject}\n`;
+
       }
 
       createJavaFinal += createJava;
@@ -691,8 +408,10 @@ async function processLineByLine() {
       alterPythonFinalQTD += alterPythonQTD;
       othersFinalQTD += othersQTD;
 
-      await system.execShellCommand('find . -name "input.txt" -type f -delete');
+      await system.execShellCommand('del /F /Q input.txt');
+
     }
+
   }
 
   let newJSON = montarJSONNovo();
@@ -700,177 +419,67 @@ async function processLineByLine() {
     `echo '${newJSON}' > ${directoryOF}/of-${user.numeroOF}.json`
   );
 
-  var output = `${yourName}-${month}-${data.getFullYear()}`;
-  var filePath = `${directoryOF}/${output}.txt`;
+  let output = `${yourName}-${month}-${data.getFullYear()}`;
+  let filePath = `${directoryOF}/${output}.txt`;
 
   fileManager.writeFile(filePath, fullReportFile);
 
-  var tmpResult = xlsManager.writeToXLS(
-    createJavaFinalQTD,
-    createJavaOptions,
-    createJavaFinal,
-    worksheet,
-    rowCounter
-  );
+  let tmpResult = xlsManager.writeToXLS(createJavaFinalQTD, createJavaOptions, createJavaFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    alterJavaFinalQTD,
-    alterJavaOptions,
-    alterJavaFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(alterJavaFinalQTD, alterJavaOptions, alterJavaFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    alterJavaCompFinalQTD,
-    alterJavaCompOptions,
-    alterJavaCompFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(alterJavaCompFinalQTD, alterJavaCompOptions, alterJavaCompFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    createJavaTestFinalQTD,
-    createJavaTestOptions,
-    createJavaTestFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(createJavaTestFinalQTD, createJavaTestOptions, createJavaTestFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    createHTMLFinalQTD,
-    createHTMLOptions,
-    createHTMLFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(createHTMLFinalQTD, createHTMLOptions, createHTMLFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    alterHTMLFinalQTD,
-    alterHTMLOptions,
-    alterHTMLFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(alterHTMLFinalQTD, alterHTMLOptions, alterHTMLFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    createJSFinalQTD,
-    createJSOptions,
-    createJSFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(createJSFinalQTD, createJSOptions, createJSFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    alterJSFinalQTD,
-    alterJSOptions,
-    alterJSFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(alterJSFinalQTD, alterJSOptions, alterJSFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    createXMLFinalQTD,
-    createXMLOptions,
-    createXMLFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(createXMLFinalQTD, createXMLOptions, createXMLFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    alterXMLFinalQTD,
-    alterXMLOptions,
-    alterXMLFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(alterXMLFinalQTD, alterXMLOptions, alterXMLFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    createCSSFinalQTD,
-    createCSSOptions,
-    createCSSFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(createCSSFinalQTD, createCSSOptions, createCSSFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    alterCSSFinalQTD,
-    alterCSSOptions,
-    alterCSSFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(alterCSSFinalQTD, alterCSSOptions, alterCSSFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    createShellFinalQTD,
-    createShellOptions,
-    createShellFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(createShellFinalQTD, createShellOptions, createShellFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    alterShellFinalQTD,
-    alterShellOptions,
-    alterShellFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(alterShellFinalQTD, alterShellOptions, alterShellFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    createSQLFinalQTD,
-    createSQLOptions,
-    createSQLFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(createSQLFinalQTD, createSQLOptions, createSQLFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    createPythonFinalQTD,
-    createPythonOptions,
-    createPythonFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(createPythonFinalQTD, createPythonOptions, createPythonFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
-  tmpResult = xlsManager.writeToXLS(
-    alterPythonFinalQTD,
-    alterPythonOptions,
-    alterPythonFinal,
-    worksheet,
-    rowCounter
-  );
+  tmpResult = xlsManager.writeToXLS(alterPythonFinalQTD, alterPythonOptions, alterPythonFinal, worksheet, rowCounter);
   rowCounter = tmpResult.rowCounter;
 
-  var addRitoPointsJson = negotials.addRitosPoints(
-    totalSISBBBkp,
-    rowCounter,
-    worksheet
-  );
+  let addRitoPointsJson = negotials.addRitosPoints(totalSISBBBkp, rowCounter, worksheet);
 
   totalSISBBBkp = addRitoPointsJson.SISBBPoints;
   rowCounter = addRitoPointsJson.rowCounter;
   worksheet = addRitoPointsJson.worksheet;
 
   workbook.xlsx.writeFile(`${directoryOF}/${hermesXLS}`);
-  //await system.execShellCommand(`find . -name "${hermesXLS}" -type f -delete`);
+  //await system.execShellCommand(`${baseXLS}`);
   await updateCalDatFile();
+
 }
 
 async function updateCalDatFile() {
-  await system.execShellCommand("echo > cal.dat");
 
-  var arrTermOptions = [
+  await system.execShellCommand('echo > cal.dat');
+
+  let arrTermOptions = [
     { name: createJavaTXT, qtd: createJavaFinalQTD * createJavaPoints },
     { name: alterJavaTXT, qtd: alterJavaFinalQTD * alterJavaPoints },
-    {
-      name: alterJavaCompTXT,
-      qtd: alterJavaCompFinalQTD * alterJavaCompPoints,
-    },
-    {
-      name: createJavaTestTXT,
-      qtd: createJavaTestFinalQTD * createJavaTestPoints,
-    },
+    { name: alterJavaCompTXT, qtd: alterJavaCompFinalQTD * alterJavaCompPoints },
+    { name: createJavaTestTXT, qtd: createJavaTestFinalQTD * createJavaTestPoints },
     { name: createHTMLTXT, qtd: createHTMLFinalQTD * createHTMLPoints },
     { name: alterHTMLTXT, qtd: alterHTMLFinalQTD * alterHTMLPoints },
     { name: createJSTXT, qtd: createJSFinalQTD * createJSPoints },
@@ -883,92 +492,64 @@ async function updateCalDatFile() {
     { name: alterShellTXT, qtd: alterShellFinalQTD * alterShellPoints },
     { name: createSQLTXT, qtd: createSQLFinalQTD * createSQLPoints },
     { name: createPythonTXT, qtd: createPythonFinalQTD * createPythonPoints },
-    { name: alterPythonTXT, qtd: alterPythonFinalQTD * alterPythonPoints },
+    { name: alterPythonTXT, qtd: alterPythonFinalQTD * alterPythonPoints }
   ];
 
-  var ritosPoints =
-    (pointsList.points[11].value +
-      pointsList.points[12].value +
-      pointsList.points[13].value) *
-    utils.checkValidArrayLength(user.tasks);
+  let ritosPoints = (pointsList.points[11].value +
+    pointsList.points[12].value +
+    pointsList.points[13].value) * utils.checkValidArrayLength(user.tasks);
 
-  var operationPoints =
-    pointsList.points[16].value * utils.checkValidArrayLength(user.operations);
-  var repositoryPoints =
-    pointsList.points[17].value *
-    utils.checkValidArrayLength(user.repositories);
+  let operationPoints = pointsList.points[16].value * utils.checkValidArrayLength(user.operations);
+  let repositoryPoints = pointsList.points[17].value * utils.checkValidArrayLength(user.repositories);
 
   arrTermOptions.push({
-    name: "PARTICIPAÇÕES_EM_RITOS",
-    qtd: ritosPoints,
+    name: "PARTICIPAÇÕES_EM_RITOS", qtd: ritosPoints
   });
 
   arrTermOptions.push({
-    name: "CRIAÇÃO_DE_OPERAÇÃO",
-    qtd: operationPoints,
+    name: "CRIAÇÃO_DE_OPERAÇÃO", qtd: operationPoints
   });
 
   arrTermOptions.push({
-    name: "CRIAÇÃO_DE_REPOSITÓRIO",
-    qtd: repositoryPoints,
+    name: "CRIAÇÃO_DE_REPOSITÓRIO", qtd: repositoryPoints
   });
 
-  var calDatFile = termgraph.generateCalDatFile(arrTermOptions);
+  let calDatFile = termgraph.generateCalDatFile(arrTermOptions);
 
-  var filePath = `${userConfig.directoryOF}/cal.dat`;
+  let filePath = `${userConfig.directoryOF}/cal.dat`;
 
   fileManager.writeFile(filePath, calDatFile);
 
   console.log("");
-  console.log(
-    await system.execShellCommand(
-      "echo -n 📊​ $(tput bold)RELATÓRIO DE OF$(tput sgr0)"
-    )
-  );
-  console.log("");
+  console.log(await system.execShellCommand('echo RELATORIO DE OF'));
 
   if (othersFinalQTD > 0) {
-    console.log(
-      await system.execShellCommand(
-        `echo -n 📦 $(tput bold)Arquivos detectados:$(tput sgr0) ${totalQtdBkp} + '\x1b[33m'${othersFinalQTD}'\x1b[0m' arquivos`
-      )
-    );
+    console.log(await system.execShellCommand(`echo Arquivos detectados: ${totalQtdBkp} + \x1b[33m${othersFinalQTD}\x1b[0m arquivos`));
   } else {
-    console.log(
-      await system.execShellCommand(
-        `echo -n 📦 $(tput bold)Arquivos detectados:$(tput sgr0) ${totalQtdBkp} arquivos`
-      )
-    );
+    console.log(await system.execShellCommand(`echo Arquivos detectados: ${totalQtdBkp} arquivos`));
   }
 
-  gitFiles.forEach((file) => {
-    var fileArray = file.split("(");
+  gitFiles.forEach(file => {
+    let fileArray = file.split("(");
     fileArray[1] = fileArray[1].replace(")", "");
-    console.log(
-      `\t📬 ${fileArray[0]}` + "(" + "\x1b[32m",
-      "" + fileArray[1] + "",
-      "\x1b[0m" + ") "
-    );
+    console.log(`\t📬 ${fileArray[0]}` + '(' + '\x1b[32m', "" + fileArray[1] + "", '\x1b[0m' + ') ');
   });
 
   if (othersFinalQTD > 0) {
-    var arr = othersFinal.split("\n");
-    arr.forEach((file) => {
-      if (file != "") console.log(`\t📬` + "\x1b[33m" + ` ${file}` + "\x1b[0m");
+    let arr = othersFinal.split("\n");
+    arr.forEach(file => {
+      if (file != "")
+        console.log(`\t📬` + '\x1b[33m' + ` ${file}` + '\x1b[0m');
     });
   }
 
   //console.log(await system.execShellCommand('termgraph cal.dat'));
 
   console.log("");
-  console.log(
-    await system.execShellCommand(
-      `echo -n 🎯 $(tput bold)Pontuação:$(tput sgr0) ${totalSISBBBkp}pts`
-    )
-  );
-  console.log("");
+  console.log(await system.execShellCommand(`echo Pontuacao: ${totalSISBBBkp}pts`));
 
-  await system.execShellCommand('find . -name "cal.dat" -type f -delete');
+  await system.execShellCommand('del /F /Q cal.dat');
+
 }
 
 function montarJSONNovo() {
