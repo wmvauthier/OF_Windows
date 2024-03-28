@@ -144,7 +144,7 @@ module.exports.updateUserJsonFile = async (points, files) => {
 
     var filePath = `${directoryOF}/user.json`;
 
-    await system.execShellCommand('find . -name "user.json" -type f -delete');
+    await system.execShellCommand('del /F /Q user.json');
 
     this.writeFile(filePath, userJsonFile);
 
